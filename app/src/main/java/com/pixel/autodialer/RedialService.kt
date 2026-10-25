@@ -7,6 +7,7 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo
 import android.net.Uri
 import android.os.Build
 import android.os.Handler
@@ -68,11 +69,24 @@ class RedialService : Service() {
             CallStateManager.isRunning = true
             CallStateManager.resetAttempts()
 
-            startForeground(NOTIFICATION_ID, buildNotification("شروع تماس با $phone"))
+            startServiceForeground("شروع تماس با $phone")
             startDialCycle()
         }
 
         return START_STICKY
+    }
+
+    private fun startServiceForeground(message: String) {
+        val notification = buildNotification(message)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                startForeground(NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
+            } else {
+                startForeground(NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_NONE)
+            }
+        } else {
+            startForeground(NOTIFICATION_ID, notification)
+        }
     }
 
     private fun startDialCycle() {
@@ -156,7 +170,6 @@ class RedialService : Service() {
             TelephonyManager.CALL_STATE_IDLE -> {
                 Log.d(TAG, "Telephony state: IDLE")
                 if (CallStateManager.isRunning && CallStateManager.currentState != CallStateManager.State.ANSWERED) {
-                    // Call was disconnected (either remote hung up, carrier dropped after 20s, or accessibility clicked end call)
                     scheduleNextCall()
                 } else if (CallStateManager.currentState == CallStateManager.State.ANSWERED) {
                     Log.d(TAG, "Call ended after being answered.")

@@ -37,6 +37,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private val stateListener: (CallStateManager.State, Int) -> Unit = { state, attempt ->
+        onStateChanged(state, attempt)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -49,12 +53,12 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         updateAccessibilityWarningCard()
-        CallStateManager.addListener(::onStateChanged)
+        CallStateManager.addListener(stateListener)
     }
 
     override fun onPause() {
         super.onPause()
-        CallStateManager.removeListener(::onStateChanged)
+        CallStateManager.removeListener(stateListener)
     }
 
     private fun setupListeners() {
@@ -130,32 +134,32 @@ class MainActivity : AppCompatActivity() {
             when (state) {
                 CallStateManager.State.IDLE -> {
                     binding.tvStatus.text = getString(R.string.status_idle)
-                    binding.tvStatus.setTextColor(getColor(R.color.text_primary))
+                    binding.tvStatus.setTextColor(ContextCompat.getColor(this, R.color.text_primary))
                     binding.btnStart.isEnabled = true
                     binding.btnStop.isEnabled = false
                 }
                 CallStateManager.State.CALLING -> {
                     binding.tvStatus.text = getString(R.string.status_calling)
-                    binding.tvStatus.setTextColor(getColor(R.color.primary))
+                    binding.tvStatus.setTextColor(ContextCompat.getColor(this, R.color.primary))
                     binding.btnStart.isEnabled = false
                     binding.btnStop.isEnabled = true
                 }
                 CallStateManager.State.WAITING_NEXT -> {
                     binding.tvStatus.text = getString(R.string.status_waiting)
-                    binding.tvStatus.setTextColor(getColor(R.color.warning))
+                    binding.tvStatus.setTextColor(ContextCompat.getColor(this, R.color.warning))
                     binding.btnStart.isEnabled = false
                     binding.btnStop.isEnabled = true
                 }
                 CallStateManager.State.ANSWERED -> {
                     binding.tvStatus.text = getString(R.string.status_answered)
-                    binding.tvStatus.setTextColor(getColor(R.color.accent))
+                    binding.tvStatus.setTextColor(ContextCompat.getColor(this, R.color.accent))
                     binding.btnStart.isEnabled = true
                     binding.btnStop.isEnabled = false
                     binding.btnTestFlash.text = "خاموش کردن فلش"
                 }
                 CallStateManager.State.STOPPED -> {
                     binding.tvStatus.text = getString(R.string.status_stopped)
-                    binding.tvStatus.setTextColor(getColor(R.color.danger))
+                    binding.tvStatus.setTextColor(ContextCompat.getColor(this, R.color.danger))
                     binding.btnStart.isEnabled = true
                     binding.btnStop.isEnabled = false
                 }
