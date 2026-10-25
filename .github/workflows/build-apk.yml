@@ -34,6 +34,18 @@ jobs:
       - name: Build Debug APK with Gradle
         run: ./gradlew assembleDebug --stacktrace --no-daemon
 
+      - name: Publish to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.0
+          name: "Pixel Auto Dialer v1.0.0"
+          body: "فایل APK آماده نصب برای Google Pixel 9a"
+          draft: false
+          prerelease: false
+          files: app/build/outputs/apk/debug/app-debug.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Commit and push APK to branch
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
