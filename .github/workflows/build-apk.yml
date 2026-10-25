@@ -31,34 +31,28 @@ jobs:
 
       - name: Build Debug APK with Gradle
         run: |
-          ./gradlew assembleDebug --stacktrace --no-daemon
+          ./gradlew assembleDebug --stacktrace --no-daemon 2>&1 | tee build.log || exit 1
 
-      - name: Prepare APK file
+      - name: Print error if failed
+        if: failure()
         run: |
-          cp app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/PixelAutoDialer-v1.0.apk
+          echo "=== BUILD LOG FAILURE TAIL ==="
+          tail -n 100 build.log
+
+      - name: Commit and push APK to branch
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git checkout --orphan apk
+          git rm -rf .
+          cp app/build/outputs/apk/debug/app-debug.apk ./PixelAutoDialer.apk
+          git add PixelAutoDialer.apk
+          git commit -m "Add compiled APK [skip ci]"
+          git push -f origin apk
 
       - name: Upload Debug APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: PixelAutoDialer-Debug-APK
-          path: app/build/outputs/apk/debug/PixelAutoDialer-v1.0.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
           retention-days: 14
-
-      - name: Publish GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v1.0.0
-          name: "Pixel Auto Dialer v1.0.0"
-          body: |
-            ### فایل APK آماده نصب روی Google Pixel 9a
-            
-            - شماره‌گیری خودکار و متناوب
-            - قطع خودکار تماس پس از ۲۰ ثانیه در صورت عدم پاسخ
-            - روشن شدن چراغ‌قوه به محض پاسخگویی طرف مقابل
-            
-            روی دکمه `PixelAutoDialer-v1.0.apk` در زیر کلیک کنید تا مستقیماً روی گوشی دانلود شود.
-          draft: false
-          prerelease: false
-          files: app/build/outputs/apk/debug/PixelAutoDialer-v1.0.apk
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
