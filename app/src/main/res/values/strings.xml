@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Pixel Auto Dialer &amp; Flash</string>
+    <string name="accessibility_service_description">این سرویس برای تشخیص اتصال تماس در Google Phone و روشن کردن فلش گوشی هنگام پاسخگویی استفاده می‌شود.</string>
+    
+    <string name="title_settings">تنظیمات تماس خودکار</string>
+    <string name="label_phone_number">شماره تماس مقصد</string>
+    <string name="hint_phone_number">مثال: 021XXXXXXXX یا 09XXXXXXXXX</string>
+    
+    <string name="label_call_timeout">زمان انتظار پاسخ (ثانیه)</string>
+    <string name="hint_call_timeout">پیش‌فرض: 20 ثانیه</string>
+    
+    <string name="label_redial_delay">فاصله تا تماس بعدی (ثانیه)</string>
+    <string name="hint_redial_delay">پیش‌فرض: 3 ثانیه</string>
+    
+    <string name="btn_start">شروع تماس متناوب</string>
+    <string name="btn_stop">توقف</string>
+    <string name="btn_test_flash">تست فلش گوشی</string>
+    <string name="btn_enable_accessibility">فعال‌سازی دسترسی خودکار (Accessibility)</string>
+    
+    <string name="status_idle">آماده به کار</string>
+    <string name="status_calling">در حال برقراری تماس...</string>
+    <string name="status_waiting">تماس قطع شد. در انتظار تماس بعدی...</string>
+    <string name="status_answered">پاسخ داده شد! فلش روشن شد ✨</string>
+    <string name="status_stopped">متوقف شد.</string>
+    
+    <string name="permission_required">لطفاً مجوزهای تماس و دوربین را تایید کنید.</string>
+    <string name="accessibility_prompt">برای تشخیص پاسخ تماس و قطع بعد از ۲۰ ثانیه، باید دسترسی Accessibility را برای برنامه فعال کنید.</string>
+    
+    <string name="notification_channel_name">سرویس تماس مکرر</string>
+    <string name="notification_title">تماس مکرر فعال است</string>
+    <string name="notification_text">در حال تلاش برای برقراری تماس با شماره هدف...</string>
+    <string name="notification_stop">توقف</string>
+</resources>
